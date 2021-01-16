@@ -1,4 +1,4 @@
-#yooooooo
+#hello from my school computer
 
 import discord
 from discord.ext import commands
