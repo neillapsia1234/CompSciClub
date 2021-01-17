@@ -27,5 +27,5 @@ async def on_ready():
 
 
 
-
+# client.run('<YOUR TOKEN>')
 client.run(os.environ.get('compscitoken'))
