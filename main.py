@@ -27,5 +27,5 @@ async def on_ready():
 
 
 
-client.run('Nzk4OTI2OTgwNTk3ODA5MTUy.X_8Iuw.dJ1vbGGuQIuwoRVTVtiRJ6As1Rs')
+client.run('<YOUR TOKEN>')
 #client.run(os.environ.get('compscitoken'))
