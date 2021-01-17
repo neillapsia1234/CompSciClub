@@ -22,10 +22,10 @@ async def on_ready():
                 print(f"Failed to load {filename}")
                 print(f"[ERROR] {e}")
 
-    
 
 
 
 
-# client.run('<YOUR TOKEN>')
-client.run(os.environ.get('compscitoken'))
+
+client.run('Nzk4OTI2OTgwNTk3ODA5MTUy.X_8Iuw.dJ1vbGGuQIuwoRVTVtiRJ6As1Rs')
+#client.run(os.environ.get('compscitoken'))

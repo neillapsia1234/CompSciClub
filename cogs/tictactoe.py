@@ -15,22 +15,39 @@ class TicTacToe(commands.Cog):
              0, 0, 0,
              0, 0, 0]
         self.turnEnded = False
+
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerX) and n % 2 == 0:
-            self.spots[int(message.content) - 1] = 1
-            self.turnEnded = True
-        elif message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerO):
-            self.spots[int(message.content) - 1] = 2
-            self.turnEnded = True
-        print(str(self.spots)[1:-1])
+        # if message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerX) and n % 2 == 0:
+        #     self.spots[int(message.content) - 1] = 1
+        #     self.turnEnded = True
+        # elif message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerO):
+        #     self.spots[int(message.content) - 1] = 2
+        #     self.turnEnded = True
+        # print(str(self.spots)[1:-1])
+
+
+        if not gameOff:
+            if message.author.equals(playerX) and message.content.isdigit() and len(message.content) == 1 and self.n % 2 == 0:
+                spot = int(message.content) - 1
+                self.spots[spot] = 1
+                print(f"PLAYER X: {playerX} \nAUTHOR: {message.author}")
+            elif message.author.equals(playerO) and message.content.isdigit() and len(message.content) == 1 and self.n % 2 != 0:
+                spot = int(message.content) - 1
+                self.spots[spot] = 2
+                print(f"PLAYER O: {playerO}\nAUTHOR: {message.author}")
+
+
+            print(str(self.spots)[1:-1])
+
 
     @commands.command()
     async def tictactoe(self, ctx, friend):
-        
+
 
         gb = GameBoard(self.spots)
-        
+
         self.playerX = ctx.author
         self.playerO = friend
 
@@ -39,7 +56,7 @@ class TicTacToe(commands.Cog):
                     " 4 | 5 | 6 \n"+
                     "-----------\n"+
                     " 7 | 8 | 9 ```")
-        
+
 
         for i in range(len(self.spots)): # total 9 turns in a game
 
@@ -50,9 +67,12 @@ class TicTacToe(commands.Cog):
 
             elif not self.turnEnded: # otherwise it's player O's turn
                 gb = GameBoard(self.spots)
-                await ctx.send(f"{self.playerO} ```{gb}```")
+                await ctx.send(f"{self.playerO} {gb}")
                 self.turnEnded = False
 
+            if self.gameOff:
+                await ctx.send("THE GAME HAS ENDED")
+                break
 
             self.n+=1
 
@@ -85,23 +105,20 @@ class TicTacToe(commands.Cog):
         #     n += 1
         #     gb = GameBoard(self.spots)
         #     print(gb)
-            
-            
 
-# if self.gameOff:
-#     await ctx.send("THE GAME HAS ENDED")
-#     break
+
+
 
     @commands.command()
     async def endGame(self, ctx):
         ctx = ""
         self.gameOff = True
-    
-    
-        
+
+
+
 def setup(client):
     client.add_cog(TicTacToe(client))
-    
+
 
 
 class GameBoard():
@@ -166,5 +183,3 @@ class GameBoard():
                 str += "\t 7 | 8 | 9 "
             j += 1
         return f"```{str}```"
-
-
