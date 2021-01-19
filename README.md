@@ -23,6 +23,10 @@ A: At the end of the year we should have a bot with a bunch of functions that yo
 Q: How can I get started before the meeting?<br/>
 A: I reccomend looking up how to use git commands (clone, branch, add, commit, push, pull) and also discord.py tutorials. We can also answer questions.
 
+Q: Can I get some documentation please??<br/>
+A: discord.py: https://discordpy.readthedocs.io/en/latest/<br/>
+git command line documentation: https://git-scm.com/docs/git
+
 Q: What do I make?<br/>
 A: Heres some reccomendations:<br/>
     - add a minimax algorithm to the tictactoe game<br/>
