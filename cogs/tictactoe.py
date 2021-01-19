@@ -7,117 +7,121 @@ from discord.ext import commands
 class TicTacToe(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.gameOff = False
-        self.n = 0
-        self.playerX = ""
-        self.playerO = ""
-        self.spots = [0, 0, 0,
-             0, 0, 0,
-             0, 0, 0]
-        self.turnEnded = False
-
+        self.gameOn = False
+        
 
     @commands.Cog.listener()
-    async def on_message(self, message):
-        # if message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerX) and n % 2 == 0:
-        #     self.spots[int(message.content) - 1] = 1
-        #     self.turnEnded = True
-        # elif message.content.isdigit() and len(message.content) == 1 and message.author.equals(playerO):
-        #     self.spots[int(message.content) - 1] = 2
-        #     self.turnEnded = True
-        # print(str(self.spots)[1:-1])
-
-
-        if not gameOff:
-            if message.author.equals(playerX) and message.content.isdigit() and len(message.content) == 1 and self.n % 2 == 0:
-                spot = int(message.content) - 1
-                self.spots[spot] = 1
-                print(f"PLAYER X: {playerX} \nAUTHOR: {message.author}")
-            elif message.author.equals(playerO) and message.content.isdigit() and len(message.content) == 1 and self.n % 2 != 0:
-                spot = int(message.content) - 1
-                self.spots[spot] = 2
-                print(f"PLAYER O: {playerO}\nAUTHOR: {message.author}")
-
-
-            print(str(self.spots)[1:-1])
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            await ctx.send("You can't play alone, ping ther person you want to play with ``.tictactoe @<YOUR FRIEND>``") 
 
 
     @commands.command()
     async def tictactoe(self, ctx, friend):
+        self.gameOn = True
+        spots = [0, 0, 0,
+                0, 0, 0,
+                0, 0, 0]
+        
+        gb = GameBoard(spots)
 
-
-        gb = GameBoard(self.spots)
-
-        self.playerX = ctx.author
-        self.playerO = friend
-
-        await ctx.send(f"{self.playerX.mention}``` 1 | 2 | 3 \n"+
+        await ctx.send(f"{ctx.author.mention}``` 1 | 2 | 3 \n"+
                     "-----------\n"+
                     " 4 | 5 | 6 \n"+
                     "-----------\n"+
                     " 7 | 8 | 9 ```")
+        n = 0
+        spot = 0
 
-
-        for i in range(len(self.spots)): # total 9 turns in a game
-
-            if self.n % 2 == 0 and not self.turnEnded: # if n is even it's player X's turn
-                gb = GameBoard(self.spots)
-                await ctx.send(f"{self.playerX.mention} ```{gb}```")
-                self.turnEnded = False
-
-            elif not self.turnEnded: # otherwise it's player O's turn
-                gb = GameBoard(self.spots)
-                await ctx.send(f"{self.playerO} {gb}")
-                self.turnEnded = False
-
-            if self.gameOff:
-                await ctx.send("THE GAME HAS ENDED")
+        for i in range(len(spots)):
+            if self.gameOn:
+                if n % 2 == 0:
+                    msg = await self.client.wait_for(
+                        "message",
+                        check=lambda message: message.author == ctx.author and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                    )
+                    
+                    if msg:
+                        print(f"x turn")
+                        print(f"n --> {n}")
+                        print(f"OG GUY: {ctx.author}")
+                        print(f"AUTHOR: {msg.author}")
+                        spot = int(msg.content) - 1
+                        print(f"SPOT --> {spot}")
+                        while spots[spot] != 0 or spot < 0 or spot > 9 and self.gameOn:
+                            await ctx.send(f"{msg.author.mention} SPOT IS NOT AVAILABLE TRY AGAIN")
+                            msg = await self.client.wait_for(
+                                "message",
+                                check=lambda message: message.author == ctx.author and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                            )
+                            if msg:
+                                spot = int(msg.content) - 1
+                            print(f"SPOT --> {spot}")
+                        spots[spot] = 1
+                        print(' '.join(map(str, spots)))
+                        gb = GameBoard(spots)
+                        n += 1
+                    await ctx.send(f"{friend} {gb}")
+                else:
+                    msg = await self.client.wait_for(
+                        "message",
+                        check=lambda message: message.author.mention[2:] == friend[3:] and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                    )
+                    if msg:
+                        print(f"o turn")
+                        print(f"n --> {n}")
+                        print(f"FRIEND: {friend[3:]}")
+                        print(f"AUTHOR: {msg.author.mention[2:]}")
+                        print(f"FRIEND: {friend}")
+                        print(f"AUTHOR: {msg.author.mention}")
+                        spot = int(msg.content) - 1
+                        print(f"SPOT --> {spot}")
+                        while spots[spot] != 0 or spot < 0 or spot > 9 and self.gameOn:
+                            await ctx.send(f"{msg.author.mention} SPOT IS NOT AVAILABLE TRY AGAIN")
+                            msg = await self.client.wait_for(
+                                "message",
+                                check=lambda message: message.author.mention[2:] == friend[3:] and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                            )
+                            if msg:
+                                spot = int(msg.content) - 1
+                            print(f"SPOT --> {spot}")
+                        spots[spot] = 2
+                        print(' '.join(map(str, spots)))
+                        gb = GameBoard(spots)
+                        n += 1
+                    await ctx.send(f"{ctx.author.mention} {gb}")
+                
+                
+                if(gb.xWins(spots)):
+                    await ctx.send(f"\n\n{ctx.author.mention} Wins!! \n\n{friend}")
+                    self.gameOn = False
+                    break
+                elif(gb.oWins(spots)):
+                    await ctx.send(f"\n\n{friend} Wins! \n\n{ctx.author.mention}")
+                    self.gameOn = False
+                    break
+                if(n == 9 and not gb.xWins(spots) and not gb.oWins(spots)):
+                    await ctx.send(f"\n\nIt's a tie! \n\n{friend} {ctx.author.mention}")
+                    self.gameOn = False
+                    break
+            else:
                 break
-
-            self.n+=1
-
-
-            if(gb.xWins(self.spots)):
-                await ctx.send(f"{self.playerX.mention} Wins!")
-                break
-
-            elif(gb.oWins(self.spots)):
-                await ctx.send(f"{self.playerO} Wins!")
-                break
-
-            if(n == 9 and not gb.xWins(self.spots) and not gb.oWins(self.spots)):
-                await ctx.send("It's a tie!")
-        # for i in range(len(self.spots)):
-        #     if(n % 2 == 0):
-        #         if ctx.author == playerX:
-        #             spot = int(input("Player X: ")) - 1
-
-        #         while(self.spots[spot] != 0 or spot < 0):
-        #             spot = int(input("SPOT IS NOT AVAILABLE TRY AGAIN\nPlayer X: ")) - 1
-        #         self.spots[spot] = 1
-
-        #     else:
-        #         spot = int(input("Player O: ")) - 1
-        #         while(self.spots[spot] != 0 or spot < 0):
-        #             spot = int(input("SPOT IS NOT AVAILABLE TRY AGAIN\nPlayer O: ")) - 1
-        #         self.spots[spot] = 2
-
-        #     n += 1
-        #     gb = GameBoard(self.spots)
-        #     print(gb)
-
-
-
+                
 
     @commands.command()
     async def endGame(self, ctx):
-        ctx = ""
-        self.gameOff = True
-
+        if self.gameOn:
+            await ctx.send("THE GAME HAS ENDED")
+            self.gameOn = False
+        else:
+            await ctx.send("What game lol?")
+        
 
 
 def setup(client):
     client.add_cog(TicTacToe(client))
+
+
 
 
 
