@@ -4,11 +4,6 @@ import os
 
 client = commands.Bot(command_prefix=".")
 
-#.tictactoe @friend
-#play tictactoe
-#only accept stuff from those two people
-#.endgame
-
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
