@@ -33,6 +33,7 @@ class TicTacToe(commands.Cog):
         n = 0
         spot = 0
 
+        
         for i in range(len(spots)):
             if self.gameOn:
                 if n % 2 == 0:
@@ -65,7 +66,7 @@ class TicTacToe(commands.Cog):
                 else:
                     msg = await self.client.wait_for(
                         "message",
-                        check=lambda message: message.author.mention[2:] == friend[3:] and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                        check=lambda message: message.author.mention.replace("!", "") == friend.replace("!", "") and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
                     )
                     if msg:
                         print(f"o turn")
@@ -80,7 +81,7 @@ class TicTacToe(commands.Cog):
                             await ctx.send(f"{msg.author.mention} SPOT IS NOT AVAILABLE TRY AGAIN")
                             msg = await self.client.wait_for(
                                 "message",
-                                check=lambda message: message.author.mention[2:] == friend[3:] and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
+                                check=lambda message: message.author.mention.replace("!", "") == friend.replace("!", "") and message.channel == ctx.channel and message.content.isdigit() and len(message.content) == 1
                             )
                             if msg:
                                 spot = int(msg.content) - 1
