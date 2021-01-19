@@ -17,7 +17,7 @@ Q: Are we allowed to change peoples code?
 A: ABSOLUTLEY! Make any changes you see necessary, we will be reviewing them
 
 Q: What's the point of this?
-A: At the end of the year we should have a bot with a bunch of functions that you guys made together (also you learn some stuff idk ¯\\__(ツ)__/¯ )
+A: At the end of the year we should have a bot with a bunch of functions that you guys made together (also you learn some stuff idk ¯\\\_(ツ)\_/¯ )
 
 Q: What do I make?
 A: Heres some reccomendations:
