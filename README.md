@@ -2,11 +2,11 @@
 
 I'm going to discuss this project during our next meeting, but if you want to get a head start you can start coding.
 
-Intro:
+### Intro:
 
 For the first time ever... we now have a 24/7 NVD CS Club discord bot!! This is a community project. Add ANYTHING you want, and edit anything you want. Ryan, Yahav, Rachel, and I will be monitoring the pull requests and additions to the bot, and if it runs without errors and we will add it to the bot.
 
-# Questions:
+### Questions:
 
 Q: How does discord.py and git work?<br/>
 A: We won't leave you hanging like that. In our next meeting I will explain how to add your own code to this repo. If you have any questions after the meeting ping the officers with your question. If you hate us and don't want to talk to us, then use the internet :] (btw we can give you guys some good videos to watch if you want)
