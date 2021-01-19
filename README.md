@@ -1,4 +1,4 @@
-# CompSciClub
+# NVD CS Club Bot
 
 I'm going to discuss this project during our next meeting, but if you want to get a head start you can start coding.
 
